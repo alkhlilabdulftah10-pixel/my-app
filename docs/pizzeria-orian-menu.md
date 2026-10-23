@@ -1,6 +1,6 @@
-# Pizzaria Orian — Speisekarte (Entwurf zur Prüfung)
+# Pizzeria Orian — Speisekarte (Entwurf zur Prüfung)
 
-Quelle: Screenshots vom Inhaber (23.10.2026). In Bestello angelegt als **Restaurant #7, ausgeblendet** (`is_active = false`).
+Quelle: Screenshots vom Inhaber (23.10.2026). In Bestello angelegt als **Restaurant #7 „Pizzeria Orian“, ausgeblendet** (`is_active = false`).
 
 | Feld | Wert |
 |---|---|
@@ -9,7 +9,7 @@ Quelle: Screenshots vom Inhaber (23.10.2026). In Bestello angelegt als **Restaur
 | Mindestbestellwert | 25 € |
 | Lieferzeit | 35–50 Min (Abholung 15 Min) |
 | WhatsApp | Testnummer des Projektinhabers — **vor Freischaltung ersetzen** |
-| Bewertung | 4,8 (von Lieferando übernommen, vorläufig) |
+| Bewertung | 4,8 (200+, Lieferando — vom Inhaber bestätigt) |
 | Öffnungszeiten | **fehlen** → gilt als immer geöffnet |
 
 ## Pizza (34)
