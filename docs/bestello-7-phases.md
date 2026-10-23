@@ -280,8 +280,56 @@ Anmerkung: Klingel defekt
      - الحقول القديمة موجودة.
      - الحفظ بدون تسجيل دخول ← 401.
      - Al Noor سليم.
-6. **النشر**: ⏸️ ينتظر أحجام وأسعار Pizzeria Orian + تجربة صاحب المشروع.
-7. **الصيانة**: التالي المقترح: رسوم التوصيل (3 € لـ Orian).
+6. **النشر**: ⏸️ يتنشر مع v1.6.
+7. **الصيانة**: انظر v1.6.
+
+---
+
+## دورة v1.6 — نافذة اختيار الحجم (مثل ليفراندو) + رسوم التوصيل (🚧 توقفنا عند حد Floot اليومي)
+
+1. **التخطيط**: صاحب المشروع يبي التصميم مثل ليفراندو: تضغط على البيتزا، تطلع نافذة "Eine auswählen ·
+   Erforderlich"، تختار klein أو groß، وزر "Hinzufügen" عليه السعر. groß = klein + 1 €. ورسوم التوصيل
+   تنزل مثل ما هي (Orian 3 €).
+2. **التحليل**:
+   - حجمين لكل بيتزا عليها سعر "ab" (Calzone و Familienpizza سعر واحد).
+   - رسوم التوصيل للتوصيل فقط.
+   - الحد الأدنى على الأطباق بدون الرسوم (مثل ليفراندو).
+   - الرسوم تطلع في رسالة واتساب.
+   - الأدمن يقدر يشوف المطعم المخفي (معاينة).
+3. **التصميم**:
+   - `restaurants.delivery_fee numeric(10,2) DEFAULT 0 CHECK (>= 0)`، والـ API يضيف `deliveryFee`.
+   - `deliveryFee` اختياري في `restaurant_upsert`.
+   - مكوّن `SizePickerDialog` (+ `SizePicker` للاختبار).
+4. **التنفيذ**:
+   - ✅ البيانات:
+     - 31 بيتزا × (klein = السعر، groß = +1 €). Pizza Roma = 8,50 / 9,50 مطابق لصورة ليفراندو.
+     - Orian `delivery_fee = 3`.
+   - ✅ API: `deliveryFee` في `restaurant_GET` و `restaurants_GET` و `restaurant_upsert`.
+   - ✅ `buildWhatsappOrderUrl`: معامل `deliveryFee` → "Zwischensumme / Liefergebühr / Gesamt" للتوصيل فقط.
+   - ✅ `CheckoutDialog`: الإجمالي يتضمن الرسوم للتوصيل + "inkl. X € Liefergebühr".
+   - ✅ `SizePickerDialog` + صفحة المطعم:
+     - زر + يفتح النافذة.
+     - الأحجام اللي في السلة تطلع تحت الطبق مع +/−.
+     - "Lieferung 3,00 €" بالهيدر.
+   - ✅ الإدارة: حقل "Liefergebühr" في نموذج المطعم + عرضه في القائمة.
+   - ⚠️ **ناقص** (انقطع عند الحد):
+     1. **ضروري أولاً**: `pages/restaurant.$restaurantId.tsx` يستخدم `useAuth()` بس سطر
+        `import { useAuth } from "../helpers/useAuth";` ما انضاف ← صفحة المطعم **في المعاينة فقط** مكسورة.
+        المنشور ما تأثر.
+     2. شريط المعاينة: JSX `previewBanner` + CSS `.previewBanner`.
+     3. زر "Vorschau" في `/admin` لكل مطعم.
+     4. الاختبارات + typecheck + فحص الـ API (deliveryFee، أحجام Roma) + checkpoint + التوثيق.
+5. **الاختبار** (قبل الانقطاع): 9 ملفات اختبار ناجحة، و typecheck: clean.
+   - `sizePicker.spec`:
+     - لازم تختار حجم قبل الإضافة.
+     - groß × 2 = 19,00 €.
+     - رسوم التوصيل في النموذج للتوصيل فقط.
+   - `buildWhatsappOrderUrl.spec`:
+     - 3 × Roma groß + 3 € = 31,50 €.
+     - الاستلام بدون رسوم.
+   - مشكلة بيئة اختبار: Radix radio داخل `<form>` يرسل حدث jsdom يرفضه. الحل: اختيار "Abholung" مسبقاً
+     من البيانات المحفوظة بدل الضغط.
+6. **النشر**: ⏸️ بعد إكمال الناقص + تجربة صاحب المشروع.
 
 ---
 
